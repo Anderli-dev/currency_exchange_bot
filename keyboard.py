@@ -1,5 +1,6 @@
 from telebot import types
 
+
 def tradeKeyboard():
     trade_keyboard = types.ReplyKeyboardMarkup(True, True)
     key4 = types.KeyboardButton('Обміник')
@@ -9,9 +10,11 @@ def tradeKeyboard():
 
     return trade_keyboard
 
+
 def mainKeyboard():
+
     main_keyboard = types.ReplyKeyboardMarkup(True, True)
-    key1 = types.KeyboardButton('Курси валют')
+    key1 = types.KeyboardButton('💲Курси валют💲')
     key2 = types.KeyboardButton('Обмін валют')
 
     main_keyboard.add(key1)
@@ -19,14 +22,16 @@ def mainKeyboard():
 
     return main_keyboard
 
-def exchange_menu ():
+
+def exchange_menu():
+
     exchange_menu = types.InlineKeyboardMarkup()
-    key11 = types.InlineKeyboardButton(text='Доллар - гривня', callback_data='USD_to_UAH')
-    key12 = types.InlineKeyboardButton(text='Доллар - Євро', callback_data='USD_to_EUR')
-    key13 = types.InlineKeyboardButton(text='Євро - гривня', callback_data='EUR_to_UAH')
-    key14 = types.InlineKeyboardButton(text='Євро - доллар', callback_data='EUR_to_USD')
-    key15 = types.InlineKeyboardButton(text='Гривня - доллар', callback_data='UAH_to_USD')
-    key16 = types.InlineKeyboardButton(text='Гривня - євро', callback_data='UAH_to_EUR')
+    key11 = types.InlineKeyboardButton(text='🇺🇸Доллар - гривня🇺🇦', callback_data='USD_to_UAH')
+    key12 = types.InlineKeyboardButton(text='🇺🇸Доллар - Євро🇪🇺', callback_data='USD_to_EUR')
+    key13 = types.InlineKeyboardButton(text='🇪🇺Євро - гривня🇺🇦', callback_data='EUR_to_UAH')
+    key14 = types.InlineKeyboardButton(text='🇪🇺Євро - доллар🇺🇸', callback_data='EUR_to_USD')
+    key15 = types.InlineKeyboardButton(text='🇺🇦Гривня - доллар🇺🇸', callback_data='UAH_to_USD')
+    key16 = types.InlineKeyboardButton(text='🇺🇦Гривня - євро🇪🇺', callback_data='UAH_to_EUR')
 
     exchange_menu.add(key11)
     exchange_menu.add(key12)
@@ -36,12 +41,15 @@ def exchange_menu ():
     exchange_menu.add(key16)
     return exchange_menu
 
-def rate_menu ():
+
+def rate_menu():
     rate_menu = types.InlineKeyboardMarkup()
-    key17 = types.InlineKeyboardButton(text='Курс доллар', callback_data='USD_rate')
-    key18 = types.InlineKeyboardButton(text='Курс євро', callback_data='EUR_rate')
+    key17 = types.InlineKeyboardButton(text='🇺🇸Курс доллар🇺🇸', callback_data='USD_rate')
+    key18 = types.InlineKeyboardButton(text='🇪🇺Курс євро🇪🇺', callback_data='EUR_rate')
+    key19 = types.InlineKeyboardButton(text='🇺🇳Всі валюти🇺🇳', callback_data='All_rate')
 
     rate_menu.add(key17)
     rate_menu.add(key18)
+    rate_menu.add(key19)
 
     return rate_menu

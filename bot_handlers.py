@@ -1,10 +1,9 @@
 import telebot
 from config import TOKEN
 import keyboard
-from data import get_data
+from data import exchange_rates
 
 bot = telebot.TeleBot(TOKEN)
-currency = get_data()
 
 @bot.message_handler(commands=['start'])
 def hello(message):
@@ -30,10 +29,10 @@ def help(message):
 def keyboard_func(message):
     text = message.text.lower()
 
-    if text == 'курси валют':
+    if text == '💲курси валют💲':
         bot.send_message(
             chat_id=message.chat.id,
-            text='Курси валют',
+            text='💲Курси валют💲',
             reply_markup=keyboard.rate_menu()
         )
     elif text == 'обмін валют':
@@ -49,12 +48,12 @@ def keyboard_func(message):
             reply_markup=keyboard.mainKeyboard()
         )
 
+
 @bot.callback_query_handler(func=lambda call: call.data == 'USD_rate')
 def rate_USD(call):
     bot.edit_message_text(chat_id=call.message.chat.id,
                           message_id=call.message.id,
-                          text=f'Курс продажу *{round(currency["buy"][0],2)}*\nКурс купівлі *{round(currency["sale"][0],2)}*',
-                          parse_mode='Markdown'
+                          text=f"Курс продажу {exchange_rates['usd'].sell}\nКурс купівлі {exchange_rates['usd'].buy}"
                           )
 
 
@@ -62,10 +61,21 @@ def rate_USD(call):
 def rate_EUR(call):
     bot.edit_message_text(chat_id=call.message.chat.id,
                           message_id=call.message.id,
-                          text=f'Курс продажу *{round(currency["buy"][1],2)}*\nКурс купівлі *{round(currency["sale"][1],2)}*',
-                          parse_mode='Markdown'
+                          text=f"Курс продажу {exchange_rates['eur'].sell}\nКурс купівлі {exchange_rates['eur'].buy}"
                           )
 
+@bot.callback_query_handler(func=lambda call: call.data == 'All_rate')
+def rate_ALL(call):
+    bot.edit_message_text(chat_id=call.message.chat.id,
+                          message_id=call.message.id,
+                          text=f"🇺🇸Курс доллару:\n"
+                               f"Продаж *{exchange_rates['usd'].sell}*\n"
+                               f"Купівля *{exchange_rates['usd'].buy}*\n"
+                               f"🇪🇺Курс євро:\n"
+                               f"Продаж *{exchange_rates['eur'].sell}*\n"
+                               f"Купівля *{exchange_rates['eur'].buy}*\n",
+                          parse_mode='Markdown'
+                          )
 
 @bot.callback_query_handler(func=lambda call: call.data == 'USD_to_UAH')
 def step1(call):
@@ -79,7 +89,7 @@ def exchange_USD_to_UAH(msg):
     try:
         usd = float(msg.text)
         bot.send_message(chat_id=msg.chat.id,
-                         text=f'На {usd} долларів ви можете купити {round(usd * currency["sale"][0], 2)}грн',
+                         text=f"На {usd} долларів ви можете купити {round(usd * exchange_rates['usd'].buy, 2)} грн",
                          reply_markup=keyboard.mainKeyboard()
                          )
     except ValueError:
@@ -100,7 +110,7 @@ def exchange_USD_to_EUR(msg):
     try:
         usd = float(msg.text)
         bot.send_message(chat_id=msg.chat.id,
-                         text=f'На {usd} долларів ви можете купити {round(usd * (currency["sale"][0]) / (currency["sale"][1]), 2)}eur',
+                         text=f"На {usd} долларів ви можете купити {round(usd * exchange_rates['usd'].buy / exchange_rates()['eur'].buy, 2)}eur",
                          reply_markup=keyboard.mainKeyboard()
                          )
     except ValueError:
@@ -121,7 +131,7 @@ def exchange_EUR_to_UAH(msg):
     try:
         eur = float(msg.text)
         bot.send_message(chat_id=msg.chat.id,
-                         text=f'На {eur} євро ви можете купити {round(eur * currency["sale"][1], 2)}грн',
+                         text=f"На {eur} євро ви можете купити {round(eur * exchange_rates()['eur'].sell, 2)}грн",
                          reply_markup=keyboard.mainKeyboard()
                          )
     except ValueError:
@@ -142,7 +152,7 @@ def exchange_EUR_to_USD(msg):
     try:
         eur = float(msg.text)
         bot.send_message(chat_id=msg.chat.id,
-                         text=f'На {eur} євро ви можете купити {round(eur * (currency["sale"][1]) / (currency["sale"][0]), 2)}usd',
+                         text=f"На {eur} євро ви можете купити {round(eur * exchange_rates()['eur'].sell / exchange_rates['usd'].sell, 2)}usd",
                          reply_markup=keyboard.mainKeyboard()
                          )
     except ValueError:
@@ -163,7 +173,7 @@ def exchange_UAH_to_USD(msg):
     try:
         uah = float(msg.text)
         bot.send_message(chat_id=msg.chat.id,
-                         text=f'На {uah} гривень ви можете купити {round(uah / currency["sale"][0], 2)}usd',
+                         text=f"На {uah} гривень ви можете купити {round(uah / exchange_rates['usd'].sell, 2)}usd",
                          reply_markup=keyboard.mainKeyboard()
                          )
     except ValueError:
@@ -184,7 +194,7 @@ def exchange_UAH_to_EUR(msg):
     try:
         uah = float(msg.text)
         bot.send_message(chat_id=msg.chat.id,
-                         text=f'На {uah} гривень ви можете купити {round(uah / currency["sale"][1], 2)}eur',
+                         text=f"На {uah} гривень ви можете купити {round(exchange_rates()['eur'].sell, 2)}eur",
                          reply_markup=keyboard.mainKeyboard()
                          )
     except ValueError:
